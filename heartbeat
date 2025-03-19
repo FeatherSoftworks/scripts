@@ -1,0 +1,266 @@
+--[[
+ .____                  ________ ___.    _____                           __                
+ |    |    __ _______   \_____  \\_ |___/ ____\_ __  ______ ____ _____ _/  |_  ___________ 
+ |    |   |  |  \__  \   /   |   \| __ \   __\  |  \/  ___// ___\\__  \\   __\/  _ \_  __ \
+ |    |___|  |  // __ \_/    |    \ \_\ \  | |  |  /\___ \\  \___ / __ \|  | (  <_> )  | \/
+ |_______ \____/(____  /\_______  /___  /__| |____//____  >\___  >____  /__|  \____/|__|   
+         \/          \/         \/    \/                \/     \/     \/                   
+          \_Welcome to LuaObfuscator.com   (Alpha 0.10.8) ~  Much Love, Ferib 
+
+]]--
+
+local v0=game:GetService("Players");local v1=game:GetService("RunService");local v2=game:GetService("UserInputService");local v3=v0.LocalPlayer;local v4=v3.Character or v3.CharacterAdded:Wait() ;local v5=v4:WaitForChild("Humanoid");local v6=v4:WaitForChild("HumanoidRootPart");local v7=workspace.CurrentCamera;local v8=v5:WaitForChild("Animator");local v9=Instance.new("Animation");v9.AnimationId="rbxassetid://125865269944406";local v11=v8:LoadAnimation(v9);local v12=Instance.new("ScreenGui");v12.Parent=v3:WaitForChild("PlayerGui");
+
+-- CHANGE 2: Make the UI color cyan
+local cyanColor = Color3.fromRGB(0, 255, 255)
+
+-- Create movable buttons
+local function makeButtonDraggable(button)
+    local dragging = false
+    local dragInput, dragStart, startPos
+    
+    local function update(input)
+        local delta = input.Position - dragStart
+        button.Position = UDim2.new(
+            startPos.X.Scale, 
+            startPos.X.Offset + delta.X,
+            startPos.Y.Scale, 
+            startPos.Y.Offset + delta.Y
+        )
+    end
+    
+    button.InputBegan:Connect(function(input)
+        if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+            dragging = true
+            dragStart = input.Position
+            startPos = button.Position
+            
+            input.Changed:Connect(function()
+                if input.UserInputState == Enum.UserInputState.End then
+                    dragging = false
+                end
+            end)
+        end
+    end)
+    
+    button.InputChanged:Connect(function(input)
+        if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
+            dragInput = input
+        end
+    end)
+    
+    v2.InputChanged:Connect(function(input)
+        if input == dragInput and dragging then
+            update(input)
+        end
+    end)
+end
+
+-- CHANGE 3: Rename buttons - Removed Gojo button
+-- We're only keeping the Telepathy button
+local v20=Instance.new("TextButton");
+v20.Size=UDim2.new(0.15, 0, 0.08, 0);
+v20.Position=UDim2.new(0.1, 0, 0.8, 0);
+v20.BackgroundColor3=cyanColor;
+v20.Text="Enable Telepathy";
+v20.Parent=v12;
+makeButtonDraggable(v20) -- CHANGE 1: Make button movable
+
+local v26=Instance.new("Frame");
+v26.Size=UDim2.new(0.3, 0, 0.12, 0);
+v26.Position=UDim2.new(0.35, 0, 0.6, 0);
+v26.BackgroundColor3=Color3.fromRGB(25, 25, 25);
+v26.Visible=false;
+v26.Parent=v12;
+
+local v32=Instance.new("TextLabel");
+v32.Size=UDim2.new(1, 0, 0.3, 0);
+v32.BackgroundTransparency=1;
+v32.Text="Speed: 70";
+v32.TextColor3=Color3.fromRGB(255, 255, 255);
+v32.TextScaled=true;
+v32.Parent=v26;
+
+local v39=Instance.new("Frame");
+v39.Size=UDim2.new(0.9, 0, 0.4, 0);
+v39.Position=UDim2.new(0.05, 0, 0.5, 0);
+v39.BackgroundColor3=cyanColor;
+v39.Parent=v26;
+
+local v44=Instance.new("Frame");
+v44.Size=UDim2.new(0.05, 0, 1, 0);
+v44.Position=UDim2.new(0, 0, 0, 0);
+v44.BackgroundColor3=Color3.fromRGB(255, 0, 0);
+v44.Parent=v39;
+
+-- CHANGE 4: Update credits text
+local v49=Instance.new("TextLabel");
+v49.Size=UDim2.new(0.3, 0, 0.1, 0);
+v49.Position=UDim2.new(0.35, 0, 0.35, 0);
+v49.BackgroundTransparency=1;
+v49.Text="Modified By Ace from FeatherSoftworks";
+v49.TextColor3=Color3.fromRGB(255, 255, 255);
+v49.TextScaled=true;
+v49.Parent=v12;
+v49.Visible=false;
+
+local v59=false;
+local v61;
+local v62;
+local v63;
+local v65=70;
+
+local function v66() 
+    return workspace:FindFirstChild("Football");
+end 
+
+local function v68() 
+    if not v61 then 
+        return;
+    end 
+    if v62 then 
+        v62:Disconnect();
+        v62=nil;
+    end 
+    if v63 then 
+        local v83=0;
+        while true do 
+            if (v83==0) then 
+                v63:Destroy();
+                v63=nil;
+                break;
+            end 
+        end 
+    end 
+    v7.CameraSubject=v61;
+    local v73=Instance.new("BodyVelocity");
+    v73.MaxForce=Vector3.new(1000000, 1000000, 1000000);
+    v73.Parent=v61;
+    local v76;
+    v76=v1.Heartbeat:Connect(function() 
+        local v82=0;
+        while true do 
+            if (v82==0) then 
+                if (not v59 or not v61 or not v61.Parent) then 
+                    v73:Destroy();
+                    v7.CameraSubject=v4;
+                    if v76 then 
+                        v76:Disconnect();
+                    end 
+                    return;
+                end 
+                v73.Velocity=v7.CFrame.LookVector * v65;
+                break;
+            end 
+        end 
+    end);
+end 
+
+v20.MouseButton1Click:Connect(function() 
+    local v77=0;
+    while true do 
+        if (v77==0) then 
+            if not v61 then 
+                v61=v66();
+                if not v61 then 
+                    warn("No Ball Found!");
+                    return;
+                end 
+            end 
+            v59= not v59;
+            v77=1;
+        end 
+        if (v77==1) then 
+            v20.BackgroundColor3=(v59 and Color3.fromRGB(0, 255, 0)) or cyanColor;
+            v26.Visible=v59;
+            v77=2;
+        end 
+        if (v77==2) then 
+            if v59 then 
+                v68();
+            end 
+            break;
+        end 
+    end 
+end);
+
+local v69=false;
+v44.InputBegan:Connect(function(v78) 
+    if ((v78.UserInputType==Enum.UserInputType.MouseButton1) or (v78.UserInputType==Enum.UserInputType.Touch)) then 
+        v69=true;
+    end 
+end);
+
+v2.InputEnded:Connect(function(v79) 
+    if ((v79.UserInputType==Enum.UserInputType.MouseButton1) or (v79.UserInputType==Enum.UserInputType.Touch)) then 
+        v69=false;
+    end 
+end);
+
+v1.RenderStepped:Connect(function() 
+    if v69 then 
+        local v86=v2:GetMouseLocation().X;
+        local v87=v39.AbsolutePosition.X;
+        local v88=v87 + v39.AbsoluteSize.X;
+        local v89=(v86-v87)/(v88-v87);
+        v44.Position=UDim2.new(math.clamp(v89, 0, 1) - 0.025, 0, 0, 0);
+        v65=math.floor(10 + (v89 * 240));
+        v32.Text="Speed: " .. tostring(v65);
+    end 
+end);
+
+-- Modified F key functionality - removed Gojo references
+v2.InputBegan:Connect(function(v80, v81) 
+    if v81 then return; end
+    
+    if (v80.KeyCode==Enum.KeyCode.U) or (v80.KeyCode==Enum.KeyCode.F) then 
+        -- Control function
+        if not v61 then 
+            v61=v66();
+            if not v61 then 
+                warn("No Ball Found!");
+                return;
+            end 
+        end 
+        v59= not v59;
+        v20.BackgroundColor3=(v59 and Color3.fromRGB(0, 255, 0)) or cyanColor;
+        v26.Visible=v59;
+        if v59 then 
+            v68();
+        end
+    end 
+end);
+
+-- Modified credits animation
+v49.Visible=true;
+wait(5); -- Show credits for 5 seconds
+
+-- Animate credits to top of screen instead of disappearing
+local originalPosition = v49.Position
+local topPosition = UDim2.new(
+    originalPosition.X.Scale, 
+    originalPosition.X.Offset,
+    0.05, -- Move to near top of screen but still visible
+    originalPosition.Y.Offset
+)
+
+-- Animate over 2 seconds
+for i = 0, 1, 0.05 do
+    -- Interpolate position
+    v49.Position = UDim2.new(
+        originalPosition.X.Scale,
+        originalPosition.X.Offset,
+        originalPosition.Y.Scale + ((topPosition.Y.Scale - originalPosition.Y.Scale) * i),
+        originalPosition.Y.Offset
+    )
+    
+    -- Make gradually transparent
+    v49.BackgroundTransparency = 1 -- Background was already transparent
+    v49.TextTransparency = i * 0.7 -- Maximum transparency of 0.7 so it's still visible
+    
+    wait(0.1) -- Small wait between animation steps
+end
+
+-- Keep credits at top position with transparency applied
+v49.Position = topPosition
+v49.TextTransparency = 0.7
